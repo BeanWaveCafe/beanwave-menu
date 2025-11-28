@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bean Wave Cafe - Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #000000;
+            --secondary: #D4AF37;
+            --accent: #8B7500;
+            --light: #F5F5F5;
+            --dark: #1A1A1A;
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .logo-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: bold;
+            border: 3px solid var(--light);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--secondary);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 30px rgba(212, 175, 55, 0.6);
+            }
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--light);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        /* Navigation Styles */
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .category-btn {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .category-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--secondary);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+
+        .category-btn:hover:before, .category-btn.active:before {
+            left: 0;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            color: var(--primary);
+        }
+
+        /* Menu Items Styles */
+        .menu-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .menu-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin: 40px 0 30px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: var(--secondary);
+            margin: 10px auto;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-item {
+            background: var(--dark);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .menu-item:hover .item-image {
+            transform: scale(1.1);
+        }
+
+        .item-content {
+            padding: 20px;
+        }
+
+        .item-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .item-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--light);
+            background: var(--accent);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--accent);
+            color: var(--light);
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-item i {
+            color: var(--secondary);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .social-icons a {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .category-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .category-btn {
+                width: 80%;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <!-- LOGO LOCATION - Replace this div with your logo image -->
+                <div class="logo-placeholder">
+                    <img src="logo.jpeg" alt="Bean Wave Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                </div>
+                <h1 class="logo">Bean Wave</h1>
+            </div>
+            <p class="tagline">Where Every Sip Creates a Ripple</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="category-nav">
+            <button class="category-btn active" data-category="all">All Items</button>
+            <button class="category-btn" data-category="coffee">Coffee</button>
+            <button class="category-btn" data-category="special-drinks">Special Drinks</button>
+            <button class="category-btn" data-category="snacks">Snacks / Food</button>
+        </nav>
+
+        <section id="all" class="menu-section active">
+            <h2 class="section-title">Our Complete Menu</h2>
+            <div class="menu-grid">
+                <!-- Coffee Items -->
+                <div class="menu-item" data-category="coffee">
+                    <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Espresso" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Espresso</h3>
+                        <p class="item-price">₹99</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="coffee">
+                    <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cappuccino" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Cappuccino</h3>
+                        <p class="item-price">₹110</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="coffee">
+                    <img src="https://images.unsplash.com/photo-1561047029-3000c68339ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Latte" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Latte</h3>
+                        <p class="item-price">₹115</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="coffee">
+                    <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cold Coffee" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Cold Coffee</h3>
+                        <p class="item-price">₹99</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="coffee">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Mocha" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Mocha</h3>
+                        <p class="item-price">₹119</p>
+                    </div>
+                </div>
+                
+                <!-- Special Drinks -->
+                <div class="menu-item" data-category="special-drinks">
+                    <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Caramel Frappe" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Caramel Frappe</h3>
+                        <p class="item-price">₹80</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="special-drinks">
+                    <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Oreo Shake" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Oreo Shake</h3>
+                        <p class="item-price">₹70</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="special-drinks">
+                    <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cold Brew" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Cold Brew</h3>
+                        <p class="item-price">₹66</p>
+                    </div>
+                </div>
+                
+                <!-- Snacks -->
+                <div class="menu-item" data-category="snacks">
+                    <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Sandwich" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Sandwich</h3>
+                        <p class="item-price">₹55</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="snacks">
+                    <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Fries" class="item-image">
+                    <div class="item-content">
+                        <h3 class="item-name">Fries</h3>
+                        <p class="item-price">₹60</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="snacks">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYJ7kKmSlnIehJu94R2Z66ItkV_RD7N3vQYg&s">
+                    <div class="item-content">
+                        <h3 class="item-name">Garlic Bread</h3>
+                        <p class="item-price">₹45</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="coffee" class="menu-section">
+            <h2 class="section-title">Coffee Selection</h2>
+            <div class="menu-grid">
+                <!-- Coffee items will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section id="special-drinks" class="menu-section">
+            <h2 class="section-title">Special Drinks</h2>
+            <div class="menu-grid">
+                <!-- Special drinks will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section id="snacks" class="menu-section">
+            <h2 class="section-title">Snacks & Food</h2>
+            <div class="menu-grid">
+                <!-- Snacks will be populated by JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Bean Wave</div>
+            <p>Experience The Perfect Blend Of Taste And Ambiance</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>India, Telangana, Hyderabad. Chandrayan Gutta, Gulshan Iqbal Colony. Near Masjid - E - Hassa</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+91 98765 43210</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>thebeanwavecafe@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Open 7AM - 11PM</span>
+                </div>
+            </div>
+            
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+            
+            <p>&copy; 2025 Bean Wave Cafe. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category navigation
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            const menuSections = document.querySelectorAll('.menu-section');
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons and sections
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    menuSections.forEach(section => section.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const category = this.getAttribute('data-category');
+                    if (category === 'all') {
+                        document.getElementById('all').classList.add('active');
+                    } else {
+                        document.getElementById(category).classList.add('active');
+                    }
+                });
+            });
+            
+            // Populate category sections with items
+            const allItems = document.querySelectorAll('.menu-item');
+            
+            // Coffee section
+            const coffeeSection = document.querySelector('#coffee .menu-grid');
+            const coffeeItems = Array.from(allItems).filter(item => 
+                item.getAttribute('data-category') === 'coffee'
+            );
+            coffeeItems.forEach(item => {
+                coffeeSection.appendChild(item.cloneNode(true));
+            });
+            
+            // Special drinks section
+            const specialDrinksSection = document.querySelector('#special-drinks .menu-grid');
+            const specialDrinksItems = Array.from(allItems).filter(item => 
+                item.getAttribute('data-category') === 'special-drinks'
+            );
+            specialDrinksItems.forEach(item => {
+                specialDrinksSection.appendChild(item.cloneNode(true));
+            });
+            
+            // Snacks section
+            const snacksSection = document.querySelector('#snacks .menu-grid');
+            const snacksItems = Array.from(allItems).filter(item => 
+                item.getAttribute('data-category') === 'snacks'
+            );
+            snacksItems.forEach(item => {
+                snacksSection.appendChild(item.cloneNode(true));
+            });
+        });
+    </script>
+</body>
+</html>
